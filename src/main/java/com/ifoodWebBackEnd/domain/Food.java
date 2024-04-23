@@ -1,5 +1,6 @@
 package com.ifoodWebBackEnd.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.ifoodWebBackEnd.dtos.FoodRequestDTO;
 import jakarta.persistence.*;
 import lombok.*;
@@ -15,9 +16,9 @@ public class Food {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @JoinColumn(name = "restaurant_id")
-    @JoinTable(name = "restaurants")
     private Restaurant restaurant;
     private String name;
     private Double price;

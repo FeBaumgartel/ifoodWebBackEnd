@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("food")
+@RequestMapping("foods")
 public class FoodController {
     @Autowired
     private FoodService service;
@@ -31,7 +31,7 @@ public class FoodController {
         return new ResponseEntity<FoodResponseDTO>(service.updateFood(id, data), HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/id")
+    @DeleteMapping("/{id}")
     public ResponseEntity deleteFood(@PathVariable("id") Long id) {
         service.deleteFood(id);
         return new ResponseEntity(HttpStatus.OK);

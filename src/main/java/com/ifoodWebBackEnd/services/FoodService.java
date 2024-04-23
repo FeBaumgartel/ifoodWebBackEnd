@@ -1,6 +1,7 @@
 package com.ifoodWebBackEnd.services;
 
 import com.ifoodWebBackEnd.domain.Food;
+import com.ifoodWebBackEnd.domain.Restaurant;
 import com.ifoodWebBackEnd.dtos.FoodRequestDTO;
 import com.ifoodWebBackEnd.dtos.FoodResponseDTO;
 import com.ifoodWebBackEnd.repositories.FoodRepository;
@@ -23,7 +24,8 @@ public class FoodService {
 
     public FoodResponseDTO saveFood(FoodRequestDTO data){
         Food food = new Food(data);
-        food.setRestaurant(restaurantRepository.getReferenceById(data.restaurantId()));
+        Restaurant restaurant = restaurantRepository.findRestaurantById(data.restaurantId());
+        food.setRestaurant(restaurant);
         repository.save(food);
         return new FoodResponseDTO(food);
     }
