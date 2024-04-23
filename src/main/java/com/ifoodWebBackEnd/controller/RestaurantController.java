@@ -1,5 +1,6 @@
 package com.ifoodWebBackEnd.controller;
 
+import com.ifoodWebBackEnd.dtos.FoodResponseDTO;
 import com.ifoodWebBackEnd.dtos.RestaurantRequestDTO;
 import com.ifoodWebBackEnd.dtos.RestaurantResponseDTO;
 import com.ifoodWebBackEnd.services.RestaurantService;
@@ -35,5 +36,10 @@ public class RestaurantController {
     public ResponseEntity deleteRestaurant(@PathVariable("id") Long id) {
         service.deleteRestaurant(id);
         return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @GetMapping("/foods/{id}")
+    public List<FoodResponseDTO> getFoodsByRestaurant(@PathVariable("id") Long restuarantId){
+        return service.getFoodsByRestaurant(restuarantId);
     }
 }

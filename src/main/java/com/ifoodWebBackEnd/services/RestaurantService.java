@@ -1,8 +1,10 @@
 package com.ifoodWebBackEnd.services;
 
 import com.ifoodWebBackEnd.domain.Restaurant;
+import com.ifoodWebBackEnd.dtos.FoodResponseDTO;
 import com.ifoodWebBackEnd.dtos.RestaurantRequestDTO;
 import com.ifoodWebBackEnd.dtos.RestaurantResponseDTO;
+import com.ifoodWebBackEnd.repositories.FoodRepository;
 import com.ifoodWebBackEnd.repositories.RestaurantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +15,8 @@ import java.util.List;
 public class RestaurantService {
     @Autowired
     private RestaurantRepository repository;
+    @Autowired
+    private FoodRepository foodRepository;
     
     public List<RestaurantResponseDTO> getAll() {
         return repository.findAll().stream().map(RestaurantResponseDTO::new).toList();
@@ -36,5 +40,9 @@ public class RestaurantService {
 
     public void deleteRestaurant(Long id){
         repository.deleteById(id);
+    }
+
+    public List<FoodResponseDTO> getFoodsByRestaurant(Long restaurantId){
+        return foodRepository.findByRestaurantId(restaurantId).stream().map(FoodResponseDTO::new).toList();
     }
 }
