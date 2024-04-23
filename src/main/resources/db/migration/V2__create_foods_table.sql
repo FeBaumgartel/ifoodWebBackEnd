@@ -1,5 +1,5 @@
 CREATE TABLE foods(
-    id BIGINT PRIMARY KEY,
+    id BIGSERIAL PRIMARY KEY,
     name TEXT NOT NULL,
     image TEXT,
     price DECIMAL NOT NULL,
