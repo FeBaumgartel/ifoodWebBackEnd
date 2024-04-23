@@ -1,4 +1,4 @@
-package com.irestaurantWebBackEnd.controller;
+package com.ifoodWebBackEnd.controller;
 
 import com.ifoodWebBackEnd.dtos.RestaurantRequestDTO;
 import com.ifoodWebBackEnd.dtos.RestaurantResponseDTO;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("food")
+@RequestMapping("restaurants")
 public class RestaurantController {
     @Autowired
     private RestaurantService service;
