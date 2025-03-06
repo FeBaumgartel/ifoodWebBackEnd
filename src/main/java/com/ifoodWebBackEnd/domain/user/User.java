@@ -1,5 +1,6 @@
 package com.ifoodWebBackEnd.domain.user;
 
+import com.ifoodWebBackEnd.dtos.FoodRequestDTO;
 import com.ifoodWebBackEnd.dtos.UserRequestDTO;
 import jakarta.persistence.*;
 import lombok.*;
@@ -36,10 +37,11 @@ public class User implements UserDetails {
         this.password = password;
         this.role = data.role();
     }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        if(this.role == Role.RESTAURANT) return List.of(new SimpleGrantedAuthority("ROLE_RESTAURANT"));
-        else return List.of(new SimpleGrantedAuthority("ROLE_COSTUMER"));
+        if(this.role == Role.RESTAURANT) return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"),new SimpleGrantedAuthority("ROLE_USER"));
+        else return List.of(new SimpleGrantedAuthority("ROLE_USER"));
     }
 
     @Override
