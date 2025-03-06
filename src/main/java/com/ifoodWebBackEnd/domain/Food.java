@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Table(name = "foods")
-@Entity(name = "foods")
+@Entity()
 @Getter
 @Setter
 @AllArgsConstructor
@@ -14,10 +14,9 @@ import lombok.*;
 @EqualsAndHashCode(of = "id")
 public class Food {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
     @ManyToOne(fetch = FetchType.EAGER)
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @JoinColumn(name = "restaurant_id")
     private Restaurant restaurant;
     private String name;

@@ -4,8 +4,9 @@ import com.ifoodWebBackEnd.dtos.RestaurantRequestDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
+
 @Table(name = "restaurants")
-@Entity(name = "restaurants")
+@Entity()
 @Getter
 @Setter
 @AllArgsConstructor
@@ -13,7 +14,7 @@ import lombok.*;
 @EqualsAndHashCode(of = "id")
 public class Restaurant {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
     private String name;
     private String image;
