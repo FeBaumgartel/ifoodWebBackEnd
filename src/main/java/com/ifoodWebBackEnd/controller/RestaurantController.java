@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,20 +26,20 @@ public class RestaurantController {
 
     @PostMapping
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
-    public ResponseEntity<RestaurantResponseDTO> saveRestaurant(@RequestBody RestaurantRequestDTO data) {
-        return new ResponseEntity<RestaurantResponseDTO>(service.saveRestaurant(data), HttpStatus.CREATED);
+    public ResponseEntity<RestaurantResponseDTO> saveRestaurant(@RequestBody RestaurantRequestDTO data, JwtAuthenticationToken token) {
+        return new ResponseEntity<RestaurantResponseDTO>(service.saveRestaurant(data, Long.parseLong(token.getName())), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
-    public ResponseEntity<RestaurantResponseDTO> updateRestaurant(@PathVariable("id") Long id, @RequestBody RestaurantRequestDTO data) {
-        return new ResponseEntity<RestaurantResponseDTO>(service.updateRestaurant(id, data), HttpStatus.CREATED);
+    public ResponseEntity<RestaurantResponseDTO> updateRestaurant(@PathVariable("id") Long id, @RequestBody RestaurantRequestDTO data, JwtAuthenticationToken token) {
+        return new ResponseEntity<RestaurantResponseDTO>(service.updateRestaurant(id, data, Long.parseLong(token.getName())), HttpStatus.OK);
     }
 
     @DeleteMapping("/id")
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
-    public ResponseEntity deleteRestaurant(@PathVariable("id") Long id) {
-        service.deleteRestaurant(id);
+    public ResponseEntity deleteRestaurant(@PathVariable("id") Long id, JwtAuthenticationToken token) {
+        service.deleteRestaurant(id, Long.parseLong(token.getName()));
         return new ResponseEntity(HttpStatus.OK);
     }
 

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,21 +24,21 @@ public class FoodController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAuthority('SCOPE_RESTAURANT')")
-    public ResponseEntity<FoodResponseDTO> saveFood(@RequestBody FoodRequestDTO data) {
-        return new ResponseEntity<FoodResponseDTO>(service.saveFood(data), HttpStatus.CREATED);
+    @PreAuthorize("hasAnyAuthority('SCOPE_RESTAURANT', 'SCOPE_ADMIN')")
+    public ResponseEntity<FoodResponseDTO> saveFood(@RequestBody FoodRequestDTO data, JwtAuthenticationToken token) {
+        return new ResponseEntity<FoodResponseDTO>(service.saveFood(data, Long.parseLong(token.getName())), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAuthority('SCOPE_RESTAURANT')")
-    public ResponseEntity<FoodResponseDTO> updateFood(@PathVariable("id") Long id, @RequestBody FoodRequestDTO data) {
-        return new ResponseEntity<FoodResponseDTO>(service.updateFood(id, data), HttpStatus.CREATED);
+    @PreAuthorize("hasAnyAuthority('SCOPE_RESTAURANT', 'SCOPE_ADMIN')")
+    public ResponseEntity<FoodResponseDTO> updateFood(@PathVariable("id") Long id, @RequestBody FoodRequestDTO data, JwtAuthenticationToken token) {
+        return new ResponseEntity<FoodResponseDTO>(service.updateFood(id, data, Long.parseLong(token.getName())), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority('SCOPE_RESTAURANT')")
-    public ResponseEntity deleteFood(@PathVariable("id") Long id) {
-        service.deleteFood(id);
+    @PreAuthorize("hasAnyAuthority('SCOPE_RESTAURANT', 'SCOPE_ADMIN')")
+    public ResponseEntity deleteFood(@PathVariable("id") Long id, JwtAuthenticationToken token) {
+        service.deleteFood(id, Long.parseLong(token.getName()));
         return new ResponseEntity(HttpStatus.OK);
     }
 }

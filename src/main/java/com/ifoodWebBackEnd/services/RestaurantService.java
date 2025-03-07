@@ -17,28 +17,34 @@ public class RestaurantService {
     private RestaurantRepository repository;
     @Autowired
     private FoodRepository foodRepository;
+    @Autowired
+    private UserService userService;
     
     public List<RestaurantResponseDTO> getAll() {
         return repository.findAll().stream().map(RestaurantResponseDTO::new).toList();
     }
 
-    public RestaurantResponseDTO saveRestaurant(RestaurantRequestDTO data){
-        Restaurant restaurant = new Restaurant(data);
+    public RestaurantResponseDTO saveRestaurant(RestaurantRequestDTO data, Long updateUser){
+        Restaurant restaurant = new Restaurant(data, userService.findUserById(updateUser));
         repository.save(restaurant);
         return new RestaurantResponseDTO(restaurant);
     }
 
-    public RestaurantResponseDTO updateRestaurant(Long id, RestaurantRequestDTO data){
+    public RestaurantResponseDTO updateRestaurant(Long id, RestaurantRequestDTO data, Long updateUser){
         Restaurant restaurant = repository.getReferenceById(id);
         restaurant.setName(data.name());
         restaurant.setImage(data.image());
         restaurant.setStreet(data.street());
         restaurant.setNumber(data.number());
         restaurant.setCity(data.city());
+        restaurant.setUser(userService.findUserById(updateUser));
         return new RestaurantResponseDTO(restaurant);
     }
 
-    public void deleteRestaurant(Long id){
+    public void deleteRestaurant(Long id, Long updateUser){
+
+        Restaurant restaurant = repository.getReferenceById(id);
+        restaurant.setUser(userService.findUserById(updateUser));
         repository.deleteById(id);
     }
 

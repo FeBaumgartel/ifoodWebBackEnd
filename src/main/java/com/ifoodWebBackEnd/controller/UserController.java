@@ -1,57 +1,48 @@
 package com.ifoodWebBackEnd.controller;
 
-import com.ifoodWebBackEnd.domain.user.Role;
 import com.ifoodWebBackEnd.domain.user.User;
+import com.ifoodWebBackEnd.dtos.RestaurantResponseDTO;
 import com.ifoodWebBackEnd.dtos.UserRequestDTO;
+import com.ifoodWebBackEnd.dtos.UserResponseDTO;
 import com.ifoodWebBackEnd.repositories.RoleRepository;
 import com.ifoodWebBackEnd.repositories.UserRepository;
+import com.ifoodWebBackEnd.services.UserService;
 import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 public class UserController {
-
-    private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
-    private final BCryptPasswordEncoder passwordEncoder;
-
-    public UserController(UserRepository userRepository,
-                          RoleRepository roleRepository,
-                          BCryptPasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private UserService service;
+    @Autowired
+    private RoleRepository roleRepository;
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
     @Transactional
     @PostMapping("/users")
-    public ResponseEntity<Void> newUser(@RequestBody UserRequestDTO dto) {
+    public ResponseEntity<UserResponseDTO> newUser(@RequestBody UserRequestDTO data, JwtAuthenticationToken token) {
+        return new ResponseEntity<UserResponseDTO>(service.saveUser(data, Long.parseLong(token.getName())), HttpStatus.CREATED);
+    }
+    @PutMapping("/{id}")
+    public ResponseEntity<UserResponseDTO> updateRestaurant(@PathVariable("id") Long id, @RequestBody UserRequestDTO data, JwtAuthenticationToken token) {
+        return new ResponseEntity<UserResponseDTO>(service.updateUser(id, data, Long.parseLong(token.getName())), HttpStatus.OK);
+    }
 
-        var role = roleRepository.findByName(dto.role());
-
-        var userFromDb = userRepository.findByUsername(dto.username());
-        if (userFromDb.isPresent()) {
-            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY);
-        }
-
-        var user = new User();
-        user.setUsername(dto.username());
-        user.setPassword(passwordEncoder.encode(dto.password()));
-        user.setRole(role);
-
-        userRepository.save(user);
-
-        return ResponseEntity.ok().build();
+    @DeleteMapping("/id")
+    public ResponseEntity deleteRestaurant(@PathVariable("id") Long id, JwtAuthenticationToken token) {
+        service.deleteUser(id, Long.parseLong(token.getName()));
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     @GetMapping("/users")

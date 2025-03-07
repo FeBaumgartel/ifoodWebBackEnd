@@ -42,7 +42,7 @@ public class TokenController {
         var now = Instant.now();
         var expiresIn = 300L;
 
-        var scope = user.get().getRole();
+        var scope = user.get().getRole().getName().toUpperCase();
 
         var claims = JwtClaimsSet.builder()
                 .issuer("mybackend")
