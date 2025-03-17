@@ -24,25 +24,26 @@ public class Food {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
-    @ManyToOne(fetch = FetchType.EAGER)
     private String name;
     private Double price;
     private String image;
+    @ManyToOne
     @JoinColumn(name = "restaurant_id")
     private Restaurant restaurant;
+    @ManyToOne
     @JoinColumn(name = "user_id")
-    private User user;
+    private User updateUser;
     @CreationTimestamp
     private Instant creationTimestamp;
     @UpdateTimestamp
     private Instant updateTimestamp;
     private boolean deleted = false;
 
-    public Food(FoodRequestDTO data, Restaurant restaurant, User user){
+    public Food(FoodRequestDTO data, Restaurant restaurant, User updateUser){
         this.name = data.name();
         this.price = data.price();
         this.image = data.image();
         this.restaurant = restaurant;
-        this.user = user;
+        this.updateUser = updateUser;
     }
 }

@@ -9,8 +9,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Set;
-
 @Configuration
 public class AdminUserConfig implements CommandLineRunner {
 

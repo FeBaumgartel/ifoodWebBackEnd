@@ -31,8 +31,8 @@ public class UserController {
 
     @Transactional
     @PostMapping("/users")
-    public ResponseEntity<UserResponseDTO> newUser(@RequestBody UserRequestDTO data, JwtAuthenticationToken token) {
-        return new ResponseEntity<UserResponseDTO>(service.saveUser(data, Long.parseLong(token.getName())), HttpStatus.CREATED);
+    public ResponseEntity<UserResponseDTO> newUser(@RequestBody UserRequestDTO data) {
+        return new ResponseEntity<UserResponseDTO>(service.saveUser(data), HttpStatus.CREATED);
     }
     @PutMapping("/{id}")
     public ResponseEntity<UserResponseDTO> updateRestaurant(@PathVariable("id") Long id, @RequestBody UserRequestDTO data, JwtAuthenticationToken token) {

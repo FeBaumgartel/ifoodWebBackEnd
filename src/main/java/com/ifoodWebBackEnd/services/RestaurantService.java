@@ -1,6 +1,7 @@
 package com.ifoodWebBackEnd.services;
 
 import com.ifoodWebBackEnd.domain.Restaurant;
+import com.ifoodWebBackEnd.domain.user.User;
 import com.ifoodWebBackEnd.dtos.FoodResponseDTO;
 import com.ifoodWebBackEnd.dtos.RestaurantRequestDTO;
 import com.ifoodWebBackEnd.dtos.RestaurantResponseDTO;
@@ -24,10 +25,9 @@ public class RestaurantService {
         return repository.findAll().stream().map(RestaurantResponseDTO::new).toList();
     }
 
-    public RestaurantResponseDTO saveRestaurant(RestaurantRequestDTO data, Long updateUser){
-        Restaurant restaurant = new Restaurant(data, userService.findUserById(updateUser));
+    public void saveRestaurant(RestaurantRequestDTO data, User updateUser){
+        Restaurant restaurant = new Restaurant(data, updateUser);
         repository.save(restaurant);
-        return new RestaurantResponseDTO(restaurant);
     }
 
     public RestaurantResponseDTO updateRestaurant(Long id, RestaurantRequestDTO data, Long updateUser){
@@ -37,7 +37,7 @@ public class RestaurantService {
         restaurant.setStreet(data.street());
         restaurant.setNumber(data.number());
         restaurant.setCity(data.city());
-        restaurant.setUser(userService.findUserById(updateUser));
+        restaurant.setUpdateUser(userService.findUserById(updateUser));
         return new RestaurantResponseDTO(restaurant);
     }
 

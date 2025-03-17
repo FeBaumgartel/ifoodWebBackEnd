@@ -33,8 +33,9 @@ public class User {
     @ManyToOne
     @JoinColumn(name = "role_id")
     private Role role;
+    @ManyToOne
     @JoinColumn(name = "user_id")
-    private User user;
+    private User updateUser;
     @CreationTimestamp
     private Instant creationTimestamp;
     @UpdateTimestamp
@@ -45,11 +46,10 @@ public class User {
         return passwordEncoder.matches(loginRequest.password(), this.password);
     }
 
-    public User(UserRequestDTO data, String encodedPassword, Role role, User updateUser){
+    public User(UserRequestDTO data, String encodedPassword, Role role){
         this.name = data.name();
         this.username = data.username();
         this.password = encodedPassword;
         this.role = role;
-        this.user = updateUser;
     }
 }

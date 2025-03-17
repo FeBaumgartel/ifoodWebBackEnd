@@ -30,8 +30,12 @@ public class Restaurant {
     private String street;
     private String number;
     private String city;
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User updateUser;
     @CreationTimestamp
     private Instant creationTimestamp;
     @UpdateTimestamp
@@ -45,5 +49,6 @@ public class Restaurant {
         this.number = data.number();
         this.city = data.city();
         this.user = user;
+        this.updateUser = user;
     }
 }

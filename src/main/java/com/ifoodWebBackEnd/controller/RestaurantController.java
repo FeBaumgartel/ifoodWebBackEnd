@@ -24,12 +24,6 @@ public class RestaurantController {
         return service.getAll();
     }
 
-    @PostMapping
-    @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
-    public ResponseEntity<RestaurantResponseDTO> saveRestaurant(@RequestBody RestaurantRequestDTO data, JwtAuthenticationToken token) {
-        return new ResponseEntity<RestaurantResponseDTO>(service.saveRestaurant(data, Long.parseLong(token.getName())), HttpStatus.CREATED);
-    }
-
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     public ResponseEntity<RestaurantResponseDTO> updateRestaurant(@PathVariable("id") Long id, @RequestBody RestaurantRequestDTO data, JwtAuthenticationToken token) {

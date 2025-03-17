@@ -26,19 +26,19 @@ public class FoodController {
     @PostMapping
     @PreAuthorize("hasAnyAuthority('SCOPE_RESTAURANT', 'SCOPE_ADMIN')")
     public ResponseEntity<FoodResponseDTO> saveFood(@RequestBody FoodRequestDTO data, JwtAuthenticationToken token) {
-        return new ResponseEntity<FoodResponseDTO>(service.saveFood(data, Long.parseLong(token.getName())), HttpStatus.CREATED);
+        return new ResponseEntity<FoodResponseDTO>(service.saveFood(data, token), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('SCOPE_RESTAURANT', 'SCOPE_ADMIN')")
     public ResponseEntity<FoodResponseDTO> updateFood(@PathVariable("id") Long id, @RequestBody FoodRequestDTO data, JwtAuthenticationToken token) {
-        return new ResponseEntity<FoodResponseDTO>(service.updateFood(id, data, Long.parseLong(token.getName())), HttpStatus.OK);
+        return new ResponseEntity<FoodResponseDTO>(service.updateFood(id, data, token), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('SCOPE_RESTAURANT', 'SCOPE_ADMIN')")
     public ResponseEntity deleteFood(@PathVariable("id") Long id, JwtAuthenticationToken token) {
-        service.deleteFood(id, Long.parseLong(token.getName()));
+        service.deleteFood(id, token);
         return new ResponseEntity(HttpStatus.OK);
     }
 }
