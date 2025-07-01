@@ -1,6 +1,6 @@
 package com.ifoodWebBackEnd.controller;
 
-import com.ifoodWebBackEnd.dtos.FoodResponseDTO;
+import com.ifoodWebBackEnd.dtos.ProductResponseDTO;
 import com.ifoodWebBackEnd.dtos.RestaurantRequestDTO;
 import com.ifoodWebBackEnd.dtos.RestaurantResponseDTO;
 import com.ifoodWebBackEnd.services.RestaurantService;
@@ -24,10 +24,15 @@ public class RestaurantController {
         return service.getAll();
     }
 
+    @GetMapping("/{id}")
+    public RestaurantResponseDTO find(@PathVariable("id") Long id){
+        return service.getById(id);
+    }
+
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     public ResponseEntity<RestaurantResponseDTO> updateRestaurant(@PathVariable("id") Long id, @RequestBody RestaurantRequestDTO data, JwtAuthenticationToken token) {
-        return new ResponseEntity<RestaurantResponseDTO>(service.updateRestaurant(id, data, Long.parseLong(token.getName())), HttpStatus.OK);
+        return new ResponseEntity<RestaurantResponseDTO>(service.updateRestaurant(id, data), HttpStatus.OK);
     }
 
     @DeleteMapping("/id")
@@ -37,8 +42,8 @@ public class RestaurantController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @GetMapping("/foods/{id}")
-    public List<FoodResponseDTO> getFoodsByRestaurant(@PathVariable("id") Long restuarantId){
-        return service.getFoodsByRestaurant(restuarantId);
+    @GetMapping("/products/{id}")
+    public List<ProductResponseDTO> getProductsByRestaurant(@PathVariable("id") Long restuarantId){
+        return service.getProductsByRestaurant(restuarantId);
     }
 }

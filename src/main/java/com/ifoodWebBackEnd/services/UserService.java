@@ -28,6 +28,10 @@ public class UserService {
         return repository.findAll().stream().map(UserResponseDTO::new).toList();
     }
 
+    public UserResponseDTO getById(Long id) {
+        return new UserResponseDTO(this.findUserById(id));
+    }
+
     public UserResponseDTO saveUser(UserRequestDTO data){
         String roleName = data.role().toUpperCase();
         Role role = roleRepository.findByName(roleName);
@@ -36,15 +40,14 @@ public class UserService {
         repository.save(user);
 
         if(roleName == "RESTAURANT"){
-            RestaurantRequestDTO restaurantRequestDTO = new RestaurantRequestDTO(data.name(),null,null,null,null);
+            RestaurantRequestDTO restaurantRequestDTO = new RestaurantRequestDTO(data.name(), null, data.street(), data.number(), data.city(), data.uf());
 
             restaurantService.saveRestaurant(restaurantRequestDTO, user);
         }
         return new UserResponseDTO(user);
     }
 
-    public UserResponseDTO updateUser(Long id, UserRequestDTO data, Long userId){
-        User updateUser = this.findUserById(userId);
+    public UserResponseDTO updateUser(Long id, UserRequestDTO data){
         Role role = roleRepository.findByName(data.role());
 
         User user = this.findUserById(id);
@@ -52,14 +55,10 @@ public class UserService {
         user.setUsername(data.username());
         user.setPassword(passwordEncoder.encode(data.password()));
         user.setRole(role);
-        user.setUpdateUser(updateUser);
         return new UserResponseDTO(user);
     }
 
-    public void deleteUser(Long id, Long userId){
-        User user = this.findUserById(id);
-        User updateUser = this.findUserById(userId);
-        user.setUpdateUser(updateUser);
+    public void deleteUser(Long id){
         repository.deleteById(id);
     }
 

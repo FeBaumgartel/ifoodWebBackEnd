@@ -1,7 +1,7 @@
 package com.ifoodWebBackEnd.domain;
 
 import com.ifoodWebBackEnd.domain.user.User;
-import com.ifoodWebBackEnd.dtos.FoodRequestDTO;
+import com.ifoodWebBackEnd.dtos.ProductRequestDTO;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -11,16 +11,14 @@ import org.hibernate.annotations.Where;
 
 import java.time.Instant;
 
-@Table(name = "foods")
+@Table(name = "products")
 @Entity()
-@SQLDelete(sql = "UPDATE foods SET deleted = true WHERE id=?")
-@Where(clause = "deleted='false'")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class Food {
+public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
@@ -30,20 +28,11 @@ public class Food {
     @ManyToOne
     @JoinColumn(name = "restaurant_id")
     private Restaurant restaurant;
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User updateUser;
-    @CreationTimestamp
-    private Instant creationTimestamp;
-    @UpdateTimestamp
-    private Instant updateTimestamp;
-    private boolean deleted = false;
 
-    public Food(FoodRequestDTO data, Restaurant restaurant, User updateUser){
+    public Product(ProductRequestDTO data, Restaurant restaurant){
         this.name = data.name();
         this.price = data.price();
         this.image = data.image();
         this.restaurant = restaurant;
-        this.updateUser = updateUser;
     }
 }

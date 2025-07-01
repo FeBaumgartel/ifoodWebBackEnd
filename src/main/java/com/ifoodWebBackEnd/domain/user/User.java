@@ -14,8 +14,6 @@ import java.time.Instant;
 
 @Table(name = "users")
 @Entity()
-@SQLDelete(sql = "UPDATE users SET deleted = true WHERE id=?")
-@Where(clause = "deleted='false'")
 @Getter
 @Setter
 @AllArgsConstructor
@@ -30,17 +28,13 @@ public class User {
     @Column(unique = true)
     private String username;
     private String password;
+    private String street;
+    private String number;
+    private String city;
+    private String uf;
     @ManyToOne
     @JoinColumn(name = "role_id")
     private Role role;
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User updateUser;
-    @CreationTimestamp
-    private Instant creationTimestamp;
-    @UpdateTimestamp
-    private Instant updateTimestamp;
-    private boolean deleted = false;
 
     public boolean isLoginCorrect(LoginRequestDTO loginRequest, PasswordEncoder passwordEncoder) {
         return passwordEncoder.matches(loginRequest.password(), this.password);

@@ -4,18 +4,10 @@ import com.ifoodWebBackEnd.domain.user.User;
 import com.ifoodWebBackEnd.dtos.RestaurantRequestDTO;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.UpdateTimestamp;
-import org.hibernate.annotations.Where;
-
-import java.time.Instant;
 
 
 @Table(name = "restaurants")
 @Entity()
-@SQLDelete(sql = "UPDATE restaurants SET deleted = true WHERE id=?")
-@Where(clause = "deleted='false'")
 @Getter
 @Setter
 @AllArgsConstructor
@@ -30,17 +22,10 @@ public class Restaurant {
     private String street;
     private String number;
     private String city;
+    private String uf;
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User updateUser;
-    @CreationTimestamp
-    private Instant creationTimestamp;
-    @UpdateTimestamp
-    private Instant updateTimestamp;
-    private boolean deleted = false;
 
     public Restaurant(RestaurantRequestDTO data, User user){
         this.name = data.name();
@@ -49,6 +34,5 @@ public class Restaurant {
         this.number = data.number();
         this.city = data.city();
         this.user = user;
-        this.updateUser = user;
     }
 }
